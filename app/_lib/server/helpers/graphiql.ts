@@ -1,30 +1,11 @@
 export const defaultQuery = `
 # Welcome to the GraphQL playground!
-query FetchData {
-  people {
-    name
-  }
-  profiles {
-    nickname
-  }
-  memberships {
-    community {
-      name
-    }
-    owner {
-      name
-    }
-  }
-  communities {
-    name
+query FetchCourses {
+  courses {
+    title
     description
     slug
     status
-    memberships {
-      communityProfile {
-        nickname
-      }
-    }
   }
 }
 
