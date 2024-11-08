@@ -40,10 +40,10 @@ export default withAuth(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onConnect: async (context) => {
         console.log("💾 Connected to database");
-        if (process.argv.includes("--seed-data")) {
-          context.session = { data: { isAdmin: true } };
-          await insertSeedData(context);
-        }
+        // if (process.argv.includes("--seed-data")) {
+        //   context.session = { data: { isAdmin: true } };
+        //   await insertSeedData(context);
+        // }
       },
       // Optional advanced configuration
       enableLogging: true,
