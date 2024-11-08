@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Login } from "@/app/client/components/Login";
 import { auth } from "@/app/server/auth";
 

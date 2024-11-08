@@ -1,4 +1,3 @@
-//import { auth } from "@/app/server/auth";
 import { keystoneContext } from "@/app/server/keystone";
 
 export async function GET(): Promise<Response> {
@@ -16,3 +15,5 @@ export async function GET(): Promise<Response> {
     { status: 200 }
   );
 }
+
+export const dynamic = "force-dynamic";
