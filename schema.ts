@@ -42,7 +42,7 @@ function isAdminOrSamePerson({ session }: { session?: Session }) {
   };
 }
 
-function isAdminOrOwner({ session }: { session?: Session }) {
+function isAdminOrOwner({ session }: { session?: Session; listKey: string }) {
   if (session?.data?.isAdmin) return {}; // unfiltered for admins
   let ownerId;
   if (!session?.data) {
@@ -50,7 +50,6 @@ function isAdminOrOwner({ session }: { session?: Session }) {
   } else {
     ownerId = session?.data?.id;
   }
-
   return { owner: { id: { equals: ownerId } } };
 }
 
@@ -89,6 +88,22 @@ export const lists = {
       nickname: text({ validation: { isRequired: true }, isIndexed: "unique" }),
       bio: text(),
       avatar: text(),
+    },
+  }),
+  Membership: list({
+    access: {
+      operation: {
+        ...allOperations(isAdmin),
+        query: hasSession,
+      },
+      filter: {
+        query: isAdminOrOwner,
+      },
+    },
+    fields: {
+      owner: relationship({ ref: "Person.memberships", many: false }),
+      courses: relationship({ ref: "Course.memberships", many: true }),
+      learnerProfile: relationship({ ref: "Profile" }),
     },
   }),
   Course: list({
@@ -138,22 +153,122 @@ export const lists = {
         ui: { displayMode: "segmented-control" },
       }),
       memberships: relationship({ ref: "Membership.courses", many: true }),
+      modules: relationship({ ref: "Module.course", many: true }),
     },
   }),
-  Membership: list({
+  Module: list({
     access: {
       operation: {
-        ...allOperations(isAdmin),
-        query: hasSession,
+        query: allowAll,
+        create: isAdmin,
+        update: isAdmin,
+        delete: isAdmin,
       },
       filter: {
-        query: isAdminOrOwner,
+        query: ({ session }) => {
+          if (session?.data?.isAdmin) return {};
+          if (session?.data?.id) {
+            // Check if the user has a membership or if the course is public
+            return {
+              OR: [
+                {
+                  course: {
+                    memberships: {
+                      some: {
+                        owner: {
+                          id: {
+                            equals: session?.data?.id,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                {
+                  course: { status: { equals: "PUBLIC" } },
+                },
+              ],
+            };
+          }
+          return { course: { status: { equals: "PUBLIC" } } };
+        },
       },
     },
     fields: {
-      owner: relationship({ ref: "Person.memberships" }),
-      courses: relationship({ ref: "Course.memberships", many: true }),
-      learnerProfile: relationship({ ref: "Profile" }),
+      title: text({ validation: { isRequired: true } }),
+      description: text(),
+      course: relationship({ ref: "Course.modules" }),
+      lessons: relationship({ ref: "Lesson.module", many: true }),
+    },
+  }),
+  Lesson: list({
+    access: {
+      operation: {
+        query: isAdmin,
+        create: isAdmin,
+        update: isAdmin,
+        delete: isAdmin,
+      },
+      filter: {
+        query: ({ session }) => {
+          if (session?.data?.isAdmin) return {};
+          if (session?.data?.id) {
+            return {
+              OR: [
+                {
+                  module: {
+                    course: {
+                      memberships: {
+                        some: {
+                          owner: {
+                            id: {
+                              equals: session?.data?.id,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                {
+                  status: { equals: "PUBLIC" },
+                },
+              ],
+            };
+          }
+          return { status: { equals: "PUBLIC" } };
+        },
+      },
+    },
+    fields: {
+      title: text({ validation: { isRequired: true } }),
+      description: text(),
+      module: relationship({ ref: "Module.lessons" }),
+      topics: relationship({ ref: "Topic.lesson", many: true }),
+      status: select({
+        type: "enum",
+        options: [
+          { label: "Public", value: "PUBLIC" },
+          { label: "Private", value: "PRIVATE" },
+        ],
+        defaultValue: "PRIVATE",
+        ui: { displayMode: "segmented-control" },
+      }),
+    },
+  }),
+  Topic: list({
+    access: {
+      operation: {
+        query: isAdmin,
+        create: isAdmin,
+        update: isAdmin,
+        delete: isAdmin,
+      },
+    },
+    fields: {
+      title: text({ validation: { isRequired: true } }),
+      description: text(),
+      lesson: relationship({ ref: "Lesson.topics" }),
     },
   }),
 };

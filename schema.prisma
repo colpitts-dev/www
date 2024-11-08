@@ -31,15 +31,6 @@ model Profile {
   from_Membership_learnerProfile Membership[] @relation("Membership_learnerProfile")
 }
 
-model Course {
-  id          String            @id @default(cuid())
-  title       String            @default("")
-  description String            @default("")
-  slug        String            @unique @default("")
-  status      CourseStatusType? @default(PRIVATE)
-  memberships Membership[]      @relation("Course_memberships")
-}
-
 model Membership {
   id               String   @id @default(cuid())
   owner            Person?  @relation("Membership_owner", fields: [ownerId], references: [id])
@@ -52,7 +43,55 @@ model Membership {
   @@index([learnerProfileId])
 }
 
+model Course {
+  id          String            @id @default(cuid())
+  title       String            @default("")
+  description String            @default("")
+  slug        String            @unique @default("")
+  status      CourseStatusType? @default(PRIVATE)
+  memberships Membership[]      @relation("Course_memberships")
+  modules     Module[]          @relation("Module_course")
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  description String   @default("")
+  course      Course?  @relation("Module_course", fields: [courseId], references: [id])
+  courseId    String?  @map("course")
+  lessons     Lesson[] @relation("Lesson_module")
+
+  @@index([courseId])
+}
+
+model Lesson {
+  id          String            @id @default(cuid())
+  title       String            @default("")
+  description String            @default("")
+  module      Module?           @relation("Lesson_module", fields: [moduleId], references: [id])
+  moduleId    String?           @map("module")
+  topics      Topic[]           @relation("Topic_lesson")
+  status      LessonStatusType? @default(PRIVATE)
+
+  @@index([moduleId])
+}
+
+model Topic {
+  id          String  @id @default(cuid())
+  title       String  @default("")
+  description String  @default("")
+  lesson      Lesson? @relation("Topic_lesson", fields: [lessonId], references: [id])
+  lessonId    String? @map("lesson")
+
+  @@index([lessonId])
+}
+
 enum CourseStatusType {
+  PUBLIC
+  PRIVATE
+}
+
+enum LessonStatusType {
   PUBLIC
   PRIVATE
 }

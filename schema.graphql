@@ -213,74 +213,6 @@ input PersonRelateToOneForCreateInput {
   connect: PersonWhereUniqueInput
 }
 
-type Course {
-  id: ID!
-  title: String
-  description: String
-  slug: String
-  status: CourseStatusType
-  memberships(where: MembershipWhereInput! = {}, orderBy: [MembershipOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MembershipWhereUniqueInput): [Membership!]
-  membershipsCount(where: MembershipWhereInput! = {}): Int
-}
-
-enum CourseStatusType {
-  PUBLIC
-  PRIVATE
-}
-
-input CourseWhereUniqueInput {
-  id: ID
-  slug: String
-}
-
-input CourseWhereInput {
-  AND: [CourseWhereInput!]
-  OR: [CourseWhereInput!]
-  NOT: [CourseWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  description: StringFilter
-  slug: StringFilter
-  status: CourseStatusTypeNullableFilter
-  memberships: MembershipManyRelationFilter
-}
-
-input CourseStatusTypeNullableFilter {
-  equals: CourseStatusType
-  in: [CourseStatusType!]
-  notIn: [CourseStatusType!]
-  not: CourseStatusTypeNullableFilter
-}
-
-input CourseOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-  description: OrderDirection
-  slug: OrderDirection
-  status: OrderDirection
-}
-
-input CourseUpdateInput {
-  title: String
-  description: String
-  slug: String
-  status: CourseStatusType
-  memberships: MembershipRelateToManyForUpdateInput
-}
-
-input CourseUpdateArgs {
-  where: CourseWhereUniqueInput!
-  data: CourseUpdateInput!
-}
-
-input CourseCreateInput {
-  title: String
-  description: String
-  slug: String
-  status: CourseStatusType
-  memberships: MembershipRelateToManyForCreateInput
-}
-
 type Membership {
   id: ID!
   owner: Person
@@ -342,6 +274,325 @@ input CourseRelateToManyForCreateInput {
   connect: [CourseWhereUniqueInput!]
 }
 
+type Course {
+  id: ID!
+  title: String
+  description: String
+  slug: String
+  status: CourseStatusType
+  memberships(where: MembershipWhereInput! = {}, orderBy: [MembershipOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MembershipWhereUniqueInput): [Membership!]
+  membershipsCount(where: MembershipWhereInput! = {}): Int
+  modules(where: ModuleWhereInput! = {}, orderBy: [ModuleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ModuleWhereUniqueInput): [Module!]
+  modulesCount(where: ModuleWhereInput! = {}): Int
+}
+
+enum CourseStatusType {
+  PUBLIC
+  PRIVATE
+}
+
+input CourseWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CourseWhereInput {
+  AND: [CourseWhereInput!]
+  OR: [CourseWhereInput!]
+  NOT: [CourseWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  description: StringFilter
+  slug: StringFilter
+  status: CourseStatusTypeNullableFilter
+  memberships: MembershipManyRelationFilter
+  modules: ModuleManyRelationFilter
+}
+
+input CourseStatusTypeNullableFilter {
+  equals: CourseStatusType
+  in: [CourseStatusType!]
+  notIn: [CourseStatusType!]
+  not: CourseStatusTypeNullableFilter
+}
+
+input ModuleManyRelationFilter {
+  every: ModuleWhereInput
+  some: ModuleWhereInput
+  none: ModuleWhereInput
+}
+
+input CourseOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+  slug: OrderDirection
+  status: OrderDirection
+}
+
+input CourseUpdateInput {
+  title: String
+  description: String
+  slug: String
+  status: CourseStatusType
+  memberships: MembershipRelateToManyForUpdateInput
+  modules: ModuleRelateToManyForUpdateInput
+}
+
+input ModuleRelateToManyForUpdateInput {
+  disconnect: [ModuleWhereUniqueInput!]
+  set: [ModuleWhereUniqueInput!]
+  create: [ModuleCreateInput!]
+  connect: [ModuleWhereUniqueInput!]
+}
+
+input CourseUpdateArgs {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateInput!
+}
+
+input CourseCreateInput {
+  title: String
+  description: String
+  slug: String
+  status: CourseStatusType
+  memberships: MembershipRelateToManyForCreateInput
+  modules: ModuleRelateToManyForCreateInput
+}
+
+input ModuleRelateToManyForCreateInput {
+  create: [ModuleCreateInput!]
+  connect: [ModuleWhereUniqueInput!]
+}
+
+type Module {
+  id: ID!
+  title: String
+  description: String
+  course: Course
+  lessons(where: LessonWhereInput! = {}, orderBy: [LessonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LessonWhereUniqueInput): [Lesson!]
+  lessonsCount(where: LessonWhereInput! = {}): Int
+}
+
+input ModuleWhereUniqueInput {
+  id: ID
+}
+
+input ModuleWhereInput {
+  AND: [ModuleWhereInput!]
+  OR: [ModuleWhereInput!]
+  NOT: [ModuleWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  description: StringFilter
+  course: CourseWhereInput
+  lessons: LessonManyRelationFilter
+}
+
+input LessonManyRelationFilter {
+  every: LessonWhereInput
+  some: LessonWhereInput
+  none: LessonWhereInput
+}
+
+input ModuleOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+}
+
+input ModuleUpdateInput {
+  title: String
+  description: String
+  course: CourseRelateToOneForUpdateInput
+  lessons: LessonRelateToManyForUpdateInput
+}
+
+input CourseRelateToOneForUpdateInput {
+  create: CourseCreateInput
+  connect: CourseWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LessonRelateToManyForUpdateInput {
+  disconnect: [LessonWhereUniqueInput!]
+  set: [LessonWhereUniqueInput!]
+  create: [LessonCreateInput!]
+  connect: [LessonWhereUniqueInput!]
+}
+
+input ModuleUpdateArgs {
+  where: ModuleWhereUniqueInput!
+  data: ModuleUpdateInput!
+}
+
+input ModuleCreateInput {
+  title: String
+  description: String
+  course: CourseRelateToOneForCreateInput
+  lessons: LessonRelateToManyForCreateInput
+}
+
+input CourseRelateToOneForCreateInput {
+  create: CourseCreateInput
+  connect: CourseWhereUniqueInput
+}
+
+input LessonRelateToManyForCreateInput {
+  create: [LessonCreateInput!]
+  connect: [LessonWhereUniqueInput!]
+}
+
+type Lesson {
+  id: ID!
+  title: String
+  description: String
+  module: Module
+  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  topicsCount(where: TopicWhereInput! = {}): Int
+  status: LessonStatusType
+}
+
+enum LessonStatusType {
+  PUBLIC
+  PRIVATE
+}
+
+input LessonWhereUniqueInput {
+  id: ID
+}
+
+input LessonWhereInput {
+  AND: [LessonWhereInput!]
+  OR: [LessonWhereInput!]
+  NOT: [LessonWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  description: StringFilter
+  module: ModuleWhereInput
+  topics: TopicManyRelationFilter
+  status: LessonStatusTypeNullableFilter
+}
+
+input TopicManyRelationFilter {
+  every: TopicWhereInput
+  some: TopicWhereInput
+  none: TopicWhereInput
+}
+
+input LessonStatusTypeNullableFilter {
+  equals: LessonStatusType
+  in: [LessonStatusType!]
+  notIn: [LessonStatusType!]
+  not: LessonStatusTypeNullableFilter
+}
+
+input LessonOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+  status: OrderDirection
+}
+
+input LessonUpdateInput {
+  title: String
+  description: String
+  module: ModuleRelateToOneForUpdateInput
+  topics: TopicRelateToManyForUpdateInput
+  status: LessonStatusType
+}
+
+input ModuleRelateToOneForUpdateInput {
+  create: ModuleCreateInput
+  connect: ModuleWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TopicRelateToManyForUpdateInput {
+  disconnect: [TopicWhereUniqueInput!]
+  set: [TopicWhereUniqueInput!]
+  create: [TopicCreateInput!]
+  connect: [TopicWhereUniqueInput!]
+}
+
+input LessonUpdateArgs {
+  where: LessonWhereUniqueInput!
+  data: LessonUpdateInput!
+}
+
+input LessonCreateInput {
+  title: String
+  description: String
+  module: ModuleRelateToOneForCreateInput
+  topics: TopicRelateToManyForCreateInput
+  status: LessonStatusType
+}
+
+input ModuleRelateToOneForCreateInput {
+  create: ModuleCreateInput
+  connect: ModuleWhereUniqueInput
+}
+
+input TopicRelateToManyForCreateInput {
+  create: [TopicCreateInput!]
+  connect: [TopicWhereUniqueInput!]
+}
+
+type Topic {
+  id: ID!
+  title: String
+  description: String
+  lesson: Lesson
+}
+
+input TopicWhereUniqueInput {
+  id: ID
+}
+
+input TopicWhereInput {
+  AND: [TopicWhereInput!]
+  OR: [TopicWhereInput!]
+  NOT: [TopicWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  description: StringFilter
+  lesson: LessonWhereInput
+}
+
+input TopicOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  description: OrderDirection
+}
+
+input TopicUpdateInput {
+  title: String
+  description: String
+  lesson: LessonRelateToOneForUpdateInput
+}
+
+input LessonRelateToOneForUpdateInput {
+  create: LessonCreateInput
+  connect: LessonWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TopicUpdateArgs {
+  where: TopicWhereUniqueInput!
+  data: TopicUpdateInput!
+}
+
+input TopicCreateInput {
+  title: String
+  description: String
+  lesson: LessonRelateToOneForCreateInput
+}
+
+input LessonRelateToOneForCreateInput {
+  create: LessonCreateInput
+  connect: LessonWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -360,18 +611,36 @@ type Mutation {
   updateProfiles(data: [ProfileUpdateArgs!]!): [Profile]
   deleteProfile(where: ProfileWhereUniqueInput!): Profile
   deleteProfiles(where: [ProfileWhereUniqueInput!]!): [Profile]
-  createCourse(data: CourseCreateInput!): Course
-  createCourses(data: [CourseCreateInput!]!): [Course]
-  updateCourse(where: CourseWhereUniqueInput!, data: CourseUpdateInput!): Course
-  updateCourses(data: [CourseUpdateArgs!]!): [Course]
-  deleteCourse(where: CourseWhereUniqueInput!): Course
-  deleteCourses(where: [CourseWhereUniqueInput!]!): [Course]
   createMembership(data: MembershipCreateInput!): Membership
   createMemberships(data: [MembershipCreateInput!]!): [Membership]
   updateMembership(where: MembershipWhereUniqueInput!, data: MembershipUpdateInput!): Membership
   updateMemberships(data: [MembershipUpdateArgs!]!): [Membership]
   deleteMembership(where: MembershipWhereUniqueInput!): Membership
   deleteMemberships(where: [MembershipWhereUniqueInput!]!): [Membership]
+  createCourse(data: CourseCreateInput!): Course
+  createCourses(data: [CourseCreateInput!]!): [Course]
+  updateCourse(where: CourseWhereUniqueInput!, data: CourseUpdateInput!): Course
+  updateCourses(data: [CourseUpdateArgs!]!): [Course]
+  deleteCourse(where: CourseWhereUniqueInput!): Course
+  deleteCourses(where: [CourseWhereUniqueInput!]!): [Course]
+  createModule(data: ModuleCreateInput!): Module
+  createModules(data: [ModuleCreateInput!]!): [Module]
+  updateModule(where: ModuleWhereUniqueInput!, data: ModuleUpdateInput!): Module
+  updateModules(data: [ModuleUpdateArgs!]!): [Module]
+  deleteModule(where: ModuleWhereUniqueInput!): Module
+  deleteModules(where: [ModuleWhereUniqueInput!]!): [Module]
+  createLesson(data: LessonCreateInput!): Lesson
+  createLessons(data: [LessonCreateInput!]!): [Lesson]
+  updateLesson(where: LessonWhereUniqueInput!, data: LessonUpdateInput!): Lesson
+  updateLessons(data: [LessonUpdateArgs!]!): [Lesson]
+  deleteLesson(where: LessonWhereUniqueInput!): Lesson
+  deleteLessons(where: [LessonWhereUniqueInput!]!): [Lesson]
+  createTopic(data: TopicCreateInput!): Topic
+  createTopics(data: [TopicCreateInput!]!): [Topic]
+  updateTopic(where: TopicWhereUniqueInput!, data: TopicUpdateInput!): Topic
+  updateTopics(data: [TopicUpdateArgs!]!): [Topic]
+  deleteTopic(where: TopicWhereUniqueInput!): Topic
+  deleteTopics(where: [TopicWhereUniqueInput!]!): [Topic]
   endSession: Boolean!
   authenticatePersonWithPassword(email: String!, password: String!): PersonAuthenticationWithPasswordResult
   createInitialPerson(data: CreateInitialPersonInput!): PersonAuthenticationWithPasswordSuccess!
@@ -402,12 +671,21 @@ type Query {
   profile(where: ProfileWhereUniqueInput!): Profile
   profiles(where: ProfileWhereInput! = {}, orderBy: [ProfileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProfileWhereUniqueInput): [Profile!]
   profilesCount(where: ProfileWhereInput! = {}): Int
-  course(where: CourseWhereUniqueInput!): Course
-  courses(where: CourseWhereInput! = {}, orderBy: [CourseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CourseWhereUniqueInput): [Course!]
-  coursesCount(where: CourseWhereInput! = {}): Int
   membership(where: MembershipWhereUniqueInput!): Membership
   memberships(where: MembershipWhereInput! = {}, orderBy: [MembershipOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MembershipWhereUniqueInput): [Membership!]
   membershipsCount(where: MembershipWhereInput! = {}): Int
+  course(where: CourseWhereUniqueInput!): Course
+  courses(where: CourseWhereInput! = {}, orderBy: [CourseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CourseWhereUniqueInput): [Course!]
+  coursesCount(where: CourseWhereInput! = {}): Int
+  module(where: ModuleWhereUniqueInput!): Module
+  modules(where: ModuleWhereInput! = {}, orderBy: [ModuleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ModuleWhereUniqueInput): [Module!]
+  modulesCount(where: ModuleWhereInput! = {}): Int
+  lesson(where: LessonWhereUniqueInput!): Lesson
+  lessons(where: LessonWhereInput! = {}, orderBy: [LessonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LessonWhereUniqueInput): [Lesson!]
+  lessonsCount(where: LessonWhereInput! = {}): Int
+  topic(where: TopicWhereUniqueInput!): Topic
+  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  topicsCount(where: TopicWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

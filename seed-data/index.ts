@@ -23,7 +23,15 @@ export async function insertSeedData(context: KeystoneContext<TypeInfo>) {
   console.log("🚨 Resetting database...");
 
   // DESTROY all existing lists
-  const lists = ["Person", "Course", "Profile", "Membership"];
+  const lists = [
+    "Person",
+    "Profile",
+    "Membership",
+    "Course",
+    "Module",
+    "Lesson",
+    "Topic",
+  ];
 
   await deleteLists(lists, context);
 
@@ -49,6 +57,6 @@ export async function insertSeedData(context: KeystoneContext<TypeInfo>) {
   }
 
   console.log(`✅ Seed data inserted`);
-  console.log(`👋 Please start the process with \`pnpm dev\``);
+  console.log(`👋 Please start the process with \`pnpm dev\`\n\n`);
   process.exit();
 }
