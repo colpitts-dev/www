@@ -146,10 +146,11 @@ export const lists = {
       status: select({
         type: "enum",
         options: [
+          { label: "Draft", value: "DRAFT" },
           { label: "Public", value: "PUBLIC" },
           { label: "Private", value: "PRIVATE" },
         ],
-        defaultValue: "PRIVATE",
+        defaultValue: "DRAFT",
         ui: { displayMode: "segmented-control" },
       }),
       memberships: relationship({ ref: "Membership.courses", many: true }),

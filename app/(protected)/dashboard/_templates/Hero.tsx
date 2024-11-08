@@ -10,7 +10,7 @@ export const HeroTemplate = () => {
   }
 
   return (
-    <section>
+    <section className="my-4">
       <code>{JSON.stringify(authData, null, 2)}</code>
     </section>
   );

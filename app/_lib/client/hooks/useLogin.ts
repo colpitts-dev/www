@@ -9,41 +9,19 @@ async function authenticateWithPassword({
   email: string;
   password: string;
 }) {
-  const response = await fetch("/api/graphql", {
+  const response = await fetch("/api/v1/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       credentials: "include",
     },
     cache: "no-cache",
-    body: JSON.stringify({
-      query: `
-        mutation Login($email: String!, $password: String!) {
-          authenticatePersonWithPassword(email: $email, password: $password) {
-            ... on PersonAuthenticationWithPasswordSuccess {
-              sessionToken
-              item {
-                id
-                name
-                email
-                isAdmin
-              }
-            }
-            ... on PersonAuthenticationWithPasswordFailure {
-              message
-            }
-          }
-        }`,
-      variables: {
-        email,
-        password,
-      },
-    }),
+    body: JSON.stringify({ email, password }),
   });
 
   const json = await response.json();
-  if (json?.data?.authenticatePersonWithPassword?.sessionToken) {
-    return json.data.authenticatePersonWithPassword.item;
+  if (json?.authenticatePersonWithPassword?.sessionToken) {
+    return json.authenticatePersonWithPassword.item;
   }
 
   throw new Error(json?.data?.authenticatePersonWithPassword?.message);

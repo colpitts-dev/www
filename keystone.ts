@@ -11,6 +11,7 @@ const session = statelessSessions({
     10
   ),
   secret: process.env.AUTH_SESSION_SECRET,
+  cookieName: process.env.AUTH_SESSION_NAME,
 });
 
 const { withAuth } = createAuth({

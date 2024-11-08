@@ -1,0 +1,5 @@
+.cd-header {
+  @apply flex justify-between items-center p-4 h-14;
+  @apply border-b-0 bg-surface drop-shadow;
+  @apply dark:drop-shadow-none dark:bg-surface-dark dark:border-b dark:border-b-stroke-dark;
+}

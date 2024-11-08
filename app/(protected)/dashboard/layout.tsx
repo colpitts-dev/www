@@ -13,19 +13,5 @@ export default async function ProtectedLayout({
     redirect("/");
   }
 
-  return (
-    <>
-      <header>
-        Welcome Back, {session.data?.name}
-        <nav>
-          <ul>
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main>{children}</main>
-    </>
-  );
+  return children;
 }

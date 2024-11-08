@@ -48,7 +48,7 @@ model Course {
   title       String            @default("")
   description String            @default("")
   slug        String            @unique @default("")
-  status      CourseStatusType? @default(PRIVATE)
+  status      CourseStatusType? @default(DRAFT)
   memberships Membership[]      @relation("Course_memberships")
   modules     Module[]          @relation("Module_course")
 }
@@ -87,6 +87,7 @@ model Topic {
 }
 
 enum CourseStatusType {
+  DRAFT
   PUBLIC
   PRIVATE
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useLogin } from "@/app/client/hooks/useLogin";
+import { TextInput } from "./TextInput";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -41,10 +42,9 @@ export function Login() {
         <label>
           Email
           <div className="w-full max-w-sm min-w-[200px]">
-            <input
-              className="w-full bg-transparent placeholder:text-slate-400 text-slate-500 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            <TextInput
               placeholder="Type here..."
-              name="email"
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -54,9 +54,8 @@ export function Login() {
         </label>
         <label>
           Password
-          <input
-            className="w-full bg-transparent placeholder:text-slate-400 text-slate-500 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-            name="password"
+          <TextInput
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
